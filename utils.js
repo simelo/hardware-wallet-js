@@ -31,12 +31,10 @@ const customPinCodeReader = function (func, msg) {
   };
 };
 
-const pinCodeReader = function (msg) {
-  return customPinCodeReader(function() {
-    console.log(`Enter pinCodeReader : ${msg}`);
-    return scanf('%s');
-  }, msg);
-};
+const pinCodeReader = customPinCodeReader(function(msg) {
+  console.log(msg);
+  return scanf('%s');
+}, 'Enter pinCodeReader :');
 
 const constPinCodeReader = function(pinCode, msg) {
   return customPinCodeReader(() => pinCode, msg);
@@ -59,6 +57,7 @@ const timeout = function(ms) {
 
 module.exports = {
   constPinCodeReader,
+  customPinCodeReader,
   deviceSetup,
   pinCodeReader,
   rejectPromise,
