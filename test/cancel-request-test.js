@@ -17,14 +17,14 @@ describe('Cancel Request test', function () {
   }
 
   it("Should cancel pending requests", function(done) {
-    setTimeout(function() {
-      deviceWallet.devCancelRequest().then(() => {
-        done();
-      });
-    }, 2000);
-
     setup().
       then(function() {
+        setTimeout(function() {
+          deviceWallet.devCancelRequest().then(() => {
+            done();
+          });
+        }, 2000);
+
         return deviceWallet.devChangePin(pinCodeReader);
       }).
       then(() => {

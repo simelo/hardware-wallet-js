@@ -35,7 +35,7 @@ const customPinCodeReader = function (func, msg) {
 const pinCodeReader = customPinCodeReader(function(msg) {
   console.log(msg);
   return scanf('%s');
-}, 'Enter pinCodeReader :');
+}, 'Enter pin :');
 
 const constPinCodeReader = function(pinCode, msg) {
   return customPinCodeReader(() => pinCode, msg);
