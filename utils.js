@@ -1,3 +1,4 @@
+const scanf = require('scanf');
 const deviceWallet = require('./device-wallet');
 
 const rejectPromise = function (reject) {
