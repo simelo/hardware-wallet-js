@@ -19,7 +19,10 @@ describe('Cancel Request test', function () {
   it("Should cancel pending requests", function(done) {
     setup().
       then(function() {
-        setTimeout(deviceWallet.devCancelRequest, 2000);
+        setTimeout(() => {
+          console.log("Cancelling change pin command");
+          deviceWallet.devCancelRequest();
+        }, 2000);
 
         return deviceWallet.devChangePin(pinCodeReader);
       }).
