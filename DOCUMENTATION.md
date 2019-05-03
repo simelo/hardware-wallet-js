@@ -53,6 +53,8 @@ The following actions are possible
 - Ask the device to cancel the ongoing procedure - see [devCancelRequest](#devCancelRequest)
 - Ask the device to sign a transaction using the provided information - see [devSkycoinTransactionSign](#devSkycoinTransactionSign)
 
+**Note**: The javascript library provides no support for neither `GetRawEntropy` nor `GetMixedEntropy` messages.
+
 ## General characteristics to take into account
 
 - As many of the operations performed by the hardware wallet can be slow, most of the functions of the library
@@ -357,12 +359,16 @@ Features {
   pinCached: false,
   passphraseCached: false,
   needsBackup: false,
-  model: '1'
+  model: '1',
+  firmwareFeatures: '1'
 }
 ```
 
 *Notes:*
 - This function can be called even when the hardware wallet does not have a seed.
+- `firmwareFeatures` is interpreted as a bits slice as follows
+  * bit `0` (i.e. mask `0x1`) is active if user confirmation required prior to returning internal entropy
+  * bit `1` (i.e. mask `0x2`) set if support for sending internal entropy back to the peer is enabled in firmware.
 
 ### devRecoveryDevice
 
@@ -496,6 +502,7 @@ hardware wallet returns one signature for each input. Example response:
 - Since the hardware wallet internally recovers the addresses sequentially, starting with the first one, the
 process will be slower if an address with high index is used.
 - A security alert must accepted in the hardware wallet for the operation to be completed.
+- Until the next version, only 7 inputs and 7 outputs are available at the most.
 
 ### devUpdateFirmware
 
