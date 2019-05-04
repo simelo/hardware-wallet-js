@@ -10,7 +10,6 @@ describe('Cancel Request test', function () {
   if (deviceWallet.getDevice() === null) {
     console.log("Skycoin hardware NOT FOUND, using emulator");
     deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.EMULATOR);
-    deviceWallet.setAutoPressButton(true, 'R');
   } else {
     console.log("Skycoin hardware is plugged in");
     deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.USB);
@@ -33,6 +32,18 @@ describe('Cancel Request test', function () {
         done();
       });
   });
+});
+
+describe('Change Pin test', function () {
+  this.timeout(0);
+  if (deviceWallet.getDevice() === null) {
+    console.log("Skycoin hardware NOT FOUND, using emulator");
+    deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.EMULATOR);
+    deviceWallet.setAutoPressButton(true, 'R');
+  } else {
+    console.log("Skycoin hardware is plugged in");
+    deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.USB);
+  }
 
   it("Should change and remove PIN if not canceled", function(done) {
     const thePinCodeReader = constPinCodeReader('1234', 'Enter pin code:');
