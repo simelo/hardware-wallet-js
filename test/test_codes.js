@@ -1,4 +1,4 @@
-const deviceWallet = require('../device-wallet');
+const deviceWallet = require('../skywallet');
 const scanf = require('scanf');
 const fs = require('fs');
 const sha256 = require('js-sha256');

@@ -1,4 +1,4 @@
-const deviceWallet = require('../device-wallet');
+const deviceWallet = require('../skywallet');
 const utils = require('../utils');
 const assert = require('chai').assert;
 const rejectPromise = utils.rejectPromise;

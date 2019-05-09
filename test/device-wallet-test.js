@@ -1,5 +1,5 @@
 const messages = require('../protob/js/skycoin');
-const deviceWallet = require('../device-wallet');
+const deviceWallet = require('../skywallet');
 const assert = require('chai').assert;
 
 describe('Fail message', function () {

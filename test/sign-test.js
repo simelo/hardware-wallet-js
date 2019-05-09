@@ -1,4 +1,4 @@
-const deviceWallet = require('../device-wallet');
+const deviceWallet = require('../skywallet');
 const utils = require('../utils');
 const rejectPromise = utils.rejectPromise;
 const timeout = utils.timeout;

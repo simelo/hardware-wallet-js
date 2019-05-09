@@ -1,4 +1,4 @@
-const deviceWallet = require('./device-wallet');
+const deviceWallet = require('./skywallet');
 const scanf = require('scanf');
 
 const rejectPromise = function(msg) {
