@@ -70,3 +70,6 @@ typings/
 *.orig
 DS_Store
 
+# Release folders
+dist/
+

@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := help
-.PHONY: run lint format build-hid build-protob build test
+.PHONY: run lint format build-hid build-protob build test release
+
+PKGNAME := skywallet
 
 all: build
 
@@ -27,6 +29,11 @@ test: build-deps ## Run project test suite
 	./node_modules/.bin/serial-mocha ./test/* --bail --exit
 
 check: lint test # Perform self-tests
+
+release: # Build release package
+	mkdir -p dist/
+	npm pack
+	mv $(PKGNAME)*.tgz dist/
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
