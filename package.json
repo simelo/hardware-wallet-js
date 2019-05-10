@@ -1,5 +1,5 @@
 {
-  "name": "skywallet-js",
+  "name": "skywallet",
   "version": "1.0.0",
   "description": "[![Build Status](https://travis-ci.com/skycoin/hardware-wallet-js.svg?branch=master)](https://travis-ci.com/skycoin/hardware-wallet-js)",
   "scripts": {
