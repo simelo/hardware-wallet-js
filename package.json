@@ -1,5 +1,5 @@
 {
-  "name": "hardware-wallet-js",
+  "name": "skywallet-js",
   "version": "1.0.0",
   "description": "[![Build Status](https://travis-ci.com/skycoin/hardware-wallet-js.svg?branch=master)](https://travis-ci.com/skycoin/hardware-wallet-js)",
   "scripts": {
@@ -14,8 +14,8 @@
     "type": "git",
     "url": "git+https://github.com/skycoin/hardware-wallet-js.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Skycoin project <contact@skycoin.net>",
+  "license": "",
   "bugs": {
     "url": "https://github.com/skycoin/hardware-wallet-js/issues"
   },
