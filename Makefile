@@ -28,6 +28,9 @@ format: build-deps ## Format source code
 test: build-deps ## Run project test suite
 	./node_modules/.bin/serial-mocha ./test/* --bail --exit
 
+version:
+	@echo $(shell grep '^  \"version\"' package.json | cut -d '"' -f4)
+
 check: lint test # Perform self-tests
 
 release: # Build release package
