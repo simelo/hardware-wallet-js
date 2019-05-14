@@ -71,4 +71,17 @@ after_script:
 notifications:
   # https://github.com/kvld/travisci-telegram TravisCI Telegram Bot integration
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
-
+before_deploy:
+  - rm -rvf dist
+  - make release
+deploy:
+- provider: releases
+  api_key: NOKEY
+  # FIXME: secure: <HEXSTR>
+  file:
+    - dist/skywallet-$(make version).tgz
+  skip_cleanup: true
+  draft: true
+  on:
+    repo: skycoin/hardware-wallet-js
+    tags: true
