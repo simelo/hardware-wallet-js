@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := help
 .PHONY: run lint format build-hid build-protob build test release
 
-PKGNAME := skywallet
+PKGNAME := $(shell grep '^  \"name\"'    package.json | cut -d '"' -f4)
+PKGVER  := $(shell grep '^  \"version\"' package.json | cut -d '"' -f4)
 
 all: build
 
@@ -28,8 +29,11 @@ format: build-deps ## Format source code
 test: build-deps ## Run project test suite
 	./node_modules/.bin/serial-mocha ./test/* --bail --exit
 
+pkgname:
+	@echo $(PKGNAME)
+
 version:
-	@echo $(shell grep '^  \"version\"' package.json | cut -d '"' -f4)
+	@echo $(PKGVER)
 
 check: lint test # Perform self-tests
 

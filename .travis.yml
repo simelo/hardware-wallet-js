@@ -1,5 +1,5 @@
 language: node_js
-node_js: "8"
+node_js: '8'
 services:
   - xvfb
 matrix:
@@ -7,18 +7,22 @@ matrix:
     - os: linux
       env:
         - PIP='sudo pip'
-#    # os: osx
+#    - os: osx
 #      env: PIP=pip
 env:
   global:
     - XARGS="-screen 0 1024x768x24"
+    - secure: lzjWmuPhpq5UWgWnMnUn155cypGgF9IIS/Bmp1Fjf2ROFqdDzYIrvpyDJgwyCDeZB0mXLSGaDERVh3W4M7nO7rvSp3NvL/VrtKNNI9hptKFuwytGb+yhnniFN7G+UBMo4P59KRLutYSka0tXpefPEtm20LPka4k0t1AP6cc7hUGBqsIAzwGSWaziCpi0ZafzN3DsmVm0glpHGwhM3HbLpHUntXMFEPeBysJwmSd/2lH10qziGJJM/OUbVM7bdCGuywcSOHpaFVtjArR8NJWBX9yGt66wQc7pE4GL7CS/+gioJHEvI5aJI3kDhiz/hfO/sI21MqAGMlz997xwy4nDh0vM7Er56+ipS8j+lzzHiLilElMpSbR3TXmP5EYZugD9nuCI+xN5/CNkK3SM73dkUuPas3sgznJmfF23YoGwu6LR4rIrEBdezTflfFyLs3aW2GuCXuPcNL6Oata98cb+n25CxFi9Cyyk95apeXq1WEn2gxsiApICs4qBPKc4p161ZxXaxQF0is4X4e2Md7rrikTgwoa5r/ip3V4Z2VhUIFVh+kIG0woUwbUEGfPLK1OydDYyT7GcDe9f785P6pctBDEOX2D3G1vloamCkTNauX4fICsnUblRgANLtwbV5G119VqFDo/yL+Z4zFjy8RH/iD7d/FsK+VFEOwLGA7bz/Xw=
 install:
+  # Package info
+  - export PKGNAME="$(make pkgname)"
+  - export PKGVER="$(make version)"
   # Install OS-specific test and build dependencies
   - sh "ci-scripts/install-${TRAVIS_OS_NAME}.sh"
   # Define env vars for osx builds
   # Include paths for brew packages e.g. SDL2
   - if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-    export SDL_INCLUDE="$(brew --prefix sdl2)/include/SDL2" ;
+    export SDL_INCLUDE="$(brew --prefix sdl2)/include/SDL2";
     fi
   - npm install
   - npm run make-protobuf-files
@@ -34,7 +38,7 @@ before_script:
   - git -C tmp/hardware-wallet submodule init
   - git -C tmp/hardware-wallet submodule update
   - git -C tmp/hardware-wallet submodule update --remote
-  # Install OS-specific test and build dependencies for hardware-wallet
+  # Install OS-specific test and build dependencies for hardware-wallet`
   - ( cd ./tmp/hardware-wallet && sh "ci-scripts/install-${TRAVIS_OS_NAME}.sh" )
   # Define env vars for Linux builds
   - if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
@@ -67,21 +71,26 @@ script:
   - make test
 after_script:
   - kill -s KILL $(pgrep emulator)
-  # screen -S xvfbsrv -X quit
 notifications:
-  # https://github.com/kvld/travisci-telegram TravisCI Telegram Bot integration
   webhooks: https://fathomless-fjord-24024.herokuapp.com/notify
 before_deploy:
   - rm -rvf dist
   - make release
 deploy:
-- provider: releases
-  api_key: NOKEY
-  # FIXME: secure: <HEXSTR>
-  file:
-    - dist/skywallet-$(make version).tgz
-  skip_cleanup: true
-  draft: true
-  on:
-    repo: skycoin/hardware-wallet-js
-    tags: true
+  - provider: releases
+    api_key:
+      secure: z5D53zjTPL4iVb+AUTVjH6Sw22nKLU1SXX9KqaQZ3LxGa9U1l75dED0rqlKNbnpHq5jBkcAKDwakf2RxyxZgqHZ7F41Onciv2rF5pqxsRpYw4LDWDwFFpTlxwmGkLBeICfuj4h/wZNsR2HcRRs+7L/VZyL5asODx9x73wrNQk/QDJCQKsiVaP4x5dPmUKNMBd6eYwJJsrPPD2vZqdeLPLrCZPPHQ1p/ciGc2mv2lMjTKaMQMwbx8br5XopRXjhSU7/8XUkfg51FY0g8yf/kvWd0j+WFkrjXjud37jYNMBiv+HTtnsQ9Ex5BTWrAsGEKo5DX7SpsLeaV2eIkgEsDIm8TVpCVPYr7z7+BdY0K8zb/8yveK9HJHtjurEAhXKtPKVD1jEdL+cLLF7O+JiUxI23TEshK9gjGUMpCpCKQtzB2flBmUcGTivGbIa8nmLC2ugqCOxV3ycalRQLfeGm4lHqTVtRdCs2uSuYbdLMeJdxd3nq5bm/FRrLho5tV7je+Tri4LedreedWsZcpV2vsPyz2a5DIjLtxQ1OrkKBVg+ZssBUORK5Pm6qg99D13fxZYlgRbpHjvGqgOyZWkNn7fRdZtnz9VvfCmhfjeb/WkxuBoSNZL2j+Iq2rPtpX7cjn/qZXi4LDjbBG83tcC8vmvUVQO0Rz14iVNg3/h2NxDuEs=
+    file:
+      - dist/$PKGNAME-$PKGVER.tgz
+    skip_cleanup: true
+    draft: true
+    on:
+      repo: skycoin/hardware-wallet-js
+      tags: true
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key:
+      secure: Bdm9Td1CAWHdF7lmsFVqy08rymTbSG7hXrssGJQLjXQhrJBPX2lUjbM12ugkoV2YFPtkurzTSw+sJFcC45wqouJllV9ajGeGWkohMOWdarq/PMrR0tCuQIaYZEhzjpJlPu3pTKIvQdqGJls6PJt+FPeSUHwc7HxwMj+uFQ31jI7iVrtXMY3Xg2BAvnALVc04bKt7ozuVRspGk/R/GSunvAQESa0RdQ8VnEPPWvppcVWiyM8WXJVTqsfyHhwU1zmMYg5U9c99wYXaEZ894M1r1+8IhluSh4UALbUwT5UCz57hhb1XtxYQs5z7jZoKaq9tdzCtctnpi6txyeJ92K7Sk7Z1cOYD0uPPOzcLfgKkWmTHoy6kHbgm2MAXZ5VcwhhjM5SgbJUo96x9BGroau+7+fqT5WdnFFh/4SZI3E0rGTJ1N1TYChsyx8GwwtGsG6MH9CrzANMduaAeoapXPENe6X+W5MSxObNh6NPiHSRkOneWm3lc6Bu49cVAvcmU+XGwlvlZClHKH8xkp3SypJAW/LwV24B92lFRA3W69BghS0IXNBKaRzQ6gnPKosB/detgVutiaT+D5XK+XVzop5Z8LM+YoAB70WsE/BjAqtofsejBKtogSg4r9c4hn5oGqaKqJUJdO/N3rFSE1fQxh4YIvwa/GPPB6VfmqG4Q94VQMJ0=
+    on:
+      repo: skycoin/hardware-wallet-js
+      tags: true
