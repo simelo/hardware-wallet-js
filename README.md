@@ -49,7 +49,7 @@ npm run test
 - Close emulator and plug Skywallet device. Run the same command another time.
 - Create new wallet e.g. with `skycoin-cli` (or reuse existing wallet for testing purposes)
 ```sh
-
+skycoin-cli walletCreate 
 ```
 - Transfer funds to new wallet (if not already done) and check balance
 ```sh
