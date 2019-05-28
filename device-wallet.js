@@ -579,6 +579,19 @@ const decodeSuccess = function(kind, dataBuffer) {
   return `decodeSuccess failed: ${kind}`;
 };
 
+const decodeFail = function(kind, dataBuffer) {
+  if (kind == messages.MessageType.MessageType_Failure) {
+    try {
+      const answer = messages.Failure.decode(dataBuffer);
+      console.log('Fail message code', answer.code, 'message: ', answer.message);
+      return answer.message;
+    } catch (e) {
+      console.error('Wire format is invalid');
+    }
+  }
+  return `decodeSuccess failed: ${kind}`;
+};
+
 const decodeFailureAndPinCode = function(kind, dataBuffer) {
   if (kind == messages.MessageType.MessageType_Failure) {
     try {
