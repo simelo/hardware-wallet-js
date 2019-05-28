@@ -1104,7 +1104,12 @@ const devRecoveryDevice = function(wordCount, usePassphrase, wordReader, dryRun)
     const dataBytes = createRecoveryDeviceRequest(wordCount, usePassphrase, dryRun);
     const deviceHandle = new DeviceHandler(deviceType);
     // eslint-disable-next-line max-statements
-    const buttonAckLoop = function(kind) {
+    const buttonAckLoop = function (kind, data) {
+      if (kind === messages.MessageType.MessageType_Failure) {
+        deviceHandle.close();
+        reject(new Error(decodeFail(kind, data)));
+        return;
+      }
       if (kind != messages.MessageType.MessageType_ButtonRequest) {
         if (kind == messages.MessageType.MessageType_WordRequest) {
           deviceHandle.close();
