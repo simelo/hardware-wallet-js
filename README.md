@@ -38,7 +38,7 @@ $ npm run test
 
 #### Pre-release testing
 
-Pre-release testing procedure requires [skycoin-cli](https://github.com/skycoin/skycoin/tree/develop/cmd/cli). Please [install it](https://github.com/skycoin/skycoin/blob/develop/cmd/cli/README.md#install) if not available in your system. Also clone [Skywallet firmware repository](https://github.com/skycoin/hardware-wallet/) in advance.
+Pre-release testing procedure requires [skycoin-cli](https://github.com/skycoin/skycoin/tree/develop/cmd/cli). Please [install it](https://github.com/skycoin/skycoin/blob/develop/cmd/cli/README.md#install) if not available in your system. Some operations in the process require [running a Skycoin node](https://github.com/skycoin/skycoin/tree/master/INTEGRATION.md#running-the-skycoin-node). Also clone [Skywallet firmware repository](https://github.com/skycoin/hardware-wallet/) in advance.
 
 Some values need to be known during the process. They are represented by the following variables:
 
@@ -100,7 +100,7 @@ skycoin-cli decodeRawTransaction $TXN1_RAW
   * For each hash in transaction `inputs` array there should be an item in messsage `inputs` array with `hashIn` field set to the very same hash and and address index set to `0`.
   * For each source item in transaction `outputs` array there should be an item in messsage `outputs` array with fields set as follows:
     - `address` : source item's `dst`
-    - `coin` : source item's `coins * 1000000`
+    - `coin` : source item's `coins`
     - `hour` : source item's `hours`
     - `address_index` : set to `0` if source item `address` equals `ADDRESS1` or to `1` otherwise
 - Check that `signatures` array returned by hardware wallet includes entries for each and every transaction input
