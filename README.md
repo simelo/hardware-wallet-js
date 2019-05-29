@@ -52,12 +52,22 @@ Perform these actions before releasing:
 
 **Note** : In all cases `skycoin-cli` would be equivalent to `go run cmd/cli/cli.go` if current working directory set to `$GOPATH/src/github.com/skycoin/skycoin`.
 
+##### Run project test suite
+
 - Open a terminal window and run Skywallet emulator. Wait for emulator UI to display.
 - From a separate trminal window run the test suite as follows
 ```sh
 npm run test
 ```
 - Close emulator and plug Skywallet device. Run the same command another time.
+
+##### Run manual tests
+
+- Edit `./test/test_codes.js` and set all `test*` variables to true
+- Run `( cd test && node test_codes.js )`
+
+##### Run transaction tests
+
 - Create new wallet e.g. with `skycoin-cli` (or reuse existing wallet for testing purposes)
 ```sh
 skycoin-cli walletCreate -f $WALLET1.wlt -l $WALLET1
