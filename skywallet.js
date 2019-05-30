@@ -235,6 +235,21 @@ class DeviceHandler {
   }
 
   read(devReadCallback) {
+    // eslint-disable-next-line consistent-this
+    const thisHandler = this;
+    const filterEntropyReqCallback = function(knd, dta) {
+      if (knd === messages.MessageType.MessageType_EntropyRequest) {
+        // Provide external entropy
+        // FIXME: Read number of bytes from entropy request message
+        console.log('Sending external entropy to device: 32 bytes');
+        const entropyAckDataBytes = createEntropyAckRequest(32);
+        thisHandler.write(entropyAckDataBytes);
+        // Retry
+        thisHandler.read(devReadCallback);
+      } else {
+        devReadCallback(knd, dta);
+      }
+    };
     const bufferReceiver = new bufReceiver.BufferReceiver();
     switch (this.deviceType) {
     case DeviceTypeEnum.USB: {
@@ -244,7 +259,7 @@ class DeviceHandler {
           console.error(err);
           return;
         }
-        bufferReceiver.receiveBuffer(data, devReadCallback);
+        bufferReceiver.receiveBuffer(data, filterEntropyReqCallback);
         if (bufferReceiver.bytesToGet > 0) {
           console.log('Reading one more time', devHandle);
           devHandle.read(devHandleCallback);
@@ -253,7 +268,7 @@ class DeviceHandler {
       devHandle.read(devHandleCallback);
     } break;
     case DeviceTypeEnum.EMULATOR:
-      handlers.push(devReadCallback);
+      handlers.push(filterEntropyReqCallback);
       this.devHandle.on('message', function(data, rinfo) {
         if (rinfo) {
           console.log("server got:");
@@ -261,10 +276,10 @@ class DeviceHandler {
           console.log("from", rinfo.address, ":", rinfo.port);
         }
         bufferReceiver.receiveBuffer(data, function(kind) {
-          devReadCallback.apply(null, arguments);
+          filterEntropyReqCallback.apply(null, arguments);
           if ( latestDataBytes.equals(Buffer.from(createCancelRequest())) &&
             kind === messages.MessageType.MessageType_Failure ) {
-            devReadCallback.called = true;
+            filterEntropyReqCallback.called = true;
             closeAll.apply(null, arguments);
           }
         });
