@@ -77,16 +77,6 @@ before_deploy:
   - rm -rvf dist
   - make release
 deploy:
-  - provider: releases
-    api_key:
-      secure: z5D53zjTPL4iVb+AUTVjH6Sw22nKLU1SXX9KqaQZ3LxGa9U1l75dED0rqlKNbnpHq5jBkcAKDwakf2RxyxZgqHZ7F41Onciv2rF5pqxsRpYw4LDWDwFFpTlxwmGkLBeICfuj4h/wZNsR2HcRRs+7L/VZyL5asODx9x73wrNQk/QDJCQKsiVaP4x5dPmUKNMBd6eYwJJsrPPD2vZqdeLPLrCZPPHQ1p/ciGc2mv2lMjTKaMQMwbx8br5XopRXjhSU7/8XUkfg51FY0g8yf/kvWd0j+WFkrjXjud37jYNMBiv+HTtnsQ9Ex5BTWrAsGEKo5DX7SpsLeaV2eIkgEsDIm8TVpCVPYr7z7+BdY0K8zb/8yveK9HJHtjurEAhXKtPKVD1jEdL+cLLF7O+JiUxI23TEshK9gjGUMpCpCKQtzB2flBmUcGTivGbIa8nmLC2ugqCOxV3ycalRQLfeGm4lHqTVtRdCs2uSuYbdLMeJdxd3nq5bm/FRrLho5tV7je+Tri4LedreedWsZcpV2vsPyz2a5DIjLtxQ1OrkKBVg+ZssBUORK5Pm6qg99D13fxZYlgRbpHjvGqgOyZWkNn7fRdZtnz9VvfCmhfjeb/WkxuBoSNZL2j+Iq2rPtpX7cjn/qZXi4LDjbBG83tcC8vmvUVQO0Rz14iVNg3/h2NxDuEs=
-    file:
-      - dist/$PKGNAME-$PKGVER.tgz
-    skip_cleanup: true
-    draft: true
-    on:
-      repo: skycoin/hardware-wallet-js
-      tags: true
   - provider: npm
     email: $NPM_EMAIL
     api_key:
