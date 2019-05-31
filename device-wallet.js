@@ -1107,7 +1107,7 @@ const devRecoveryDevice = function(wordCount, usePassphrase, wordReader, dryRun)
     const buttonAckLoop = function (kind, data) {
       if (kind === messages.MessageType.MessageType_Failure) {
         deviceHandle.close();
-        reject(new Error(decodeFail(kind, data)));
+        reject(decodeFail(kind, data));
         return;
       }
       if (kind != messages.MessageType.MessageType_ButtonRequest) {
