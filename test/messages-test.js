@@ -18,10 +18,6 @@ const recoveryDeviceWithOutSetup = function (wordCount) {
     catch((err) => Promise.reject(err));
 };
 
-const generateSeedWithOutSetup = function (wordCount) {
-  return deviceWallet.devGenerateMnemonic(wordCount, false);
-};
-
 const generateSeedFail = function (wordCount) {
   return setup().
     then(() => deviceWallet.devGenerateMnemonic(wordCount, false)).
