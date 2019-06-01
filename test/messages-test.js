@@ -66,7 +66,7 @@ describe('Recovery', function () {
 
   it('Can not recovery an initialized device', function() {
     this.timeout(0);
-    return new Promise(function (resolve, reject) {
+    return new Promise(function (resolve) {
       setTimeout(function () {
         generateSeedOk(12).
           then(() => recoveryDeviceWithOutSetup(12)).
