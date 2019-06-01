@@ -240,13 +240,33 @@ class DeviceHandler {
     const filterEntropyReqCallback = function(knd, dta) {
       if (knd === messages.MessageType.MessageType_EntropyRequest) {
         // Provide external entropy
-        // FIXME: Read number of bytes from entropy request message
-        console.log('Sending external entropy to device: 32 bytes');
+        console.log('External entropy requested by device');
         const entropyAckDataBytes = createEntropyAckRequest(32);
         thisHandler.write(entropyAckDataBytes);
+        console.log('External entropy sent to device: 32 bytes');
         // Retry
         thisHandler.read(devReadCallback);
+      } else if (knd === messages.MessageType.MessageType_Success) {
+        console.log("Message", knd, "with data", dta);
+        const answer = messages.Success.decode(dta);
+        if (answer.msgType === messages.MessageType.MessageType_EntropyAck) {
+          console.log(`Retry read after EntropyAck success: ${answer.message}`);
+          // Filter and retry
+          thisHandler.read(devReadCallback);
+        } else {
+          devReadCallback(knd, dta);
+        }
+      } else if (knd === messages.MessageType.MessageType_Failure) {
+        const answer = messages.Failure.decode(dta);
+        if (answer.msgType === messages.MessageType.MessageType_EntropyAck) {
+          console.log(`Retry read after EntropyAck failure: ${answer.message}`);
+          // Filter and retry
+          thisHandler.read(devReadCallback);
+        } else {
+          devReadCallback(knd, dta);
+        }
       } else {
+        console.log("Message", knd, "with data", dta);
         devReadCallback(knd, dta);
       }
     };
