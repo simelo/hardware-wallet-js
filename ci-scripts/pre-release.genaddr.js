@@ -1,5 +1,4 @@
 
-scanf = require("scanf");
 dw = require("../skywallet");
 
 dw.setDeviceType(dw.DeviceTypeEnum.USB);

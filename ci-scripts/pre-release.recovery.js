@@ -14,7 +14,7 @@ const wordReader = function() {
 
 dw.devWipeDevice().
   then(() => {
-    dw.devRecoveryDevice(12, true, wordReader).
+    dw.devRecoveryDevice(12, false, wordReader).
       then(() => {
         console.log("Success!");
       });
