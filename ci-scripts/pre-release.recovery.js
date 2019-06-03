@@ -12,8 +12,9 @@ const wordReader = function() {
   });
 };
 
-const usePassphrase = (process.env.USE_PASSPHRASE == 'true')? true : (process.env.USE_PASSPHRASE == 'false')? false: null;
+const usePassphrase = false;
 console.log('Passphrase :', usePassphrase);
+
 
 dw.devWipeDevice().
   then(() => {
