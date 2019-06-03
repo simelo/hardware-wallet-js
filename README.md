@@ -42,6 +42,8 @@ Pre-release testing procedure requires [skycoin-cli](https://github.com/skycoin/
 
 The instructions that follow are meant to be followed for Skywallet devices flashed without memory protection. If your device memory is protected then some values might be different e.g. `firmwareFeatures`.
 
+During the process beware of the fact that running an Skycoin node in the background can block the Skywallet from running.
+
 Some values need to be known during the process. They are represented by the following variables:
 
 - `WALLET1`, `WALLET2`, ... names of wallets created by `skycoin_cli`
@@ -110,8 +112,8 @@ skycoin-cli addressBalance $ADDRESS1
   * `fwMajor` is set to expected firmware major version number
   * `fwMinor` is set to expected firmware minor version number
   * `fwPatch` is set to expected firmware patch version number
-  * `firmwareFeatures` is set to `0 `
-- [Set device label](DOCUMENTATION.md#devApplySettings) to a new value , say `ID3`
+  * `firmwareFeatures` is set to `0`
+- [Set device label](DOCUMENTATION.md#devApplySettings) to a new value , say `ID3`. Specify `usePassphrase=null`.
 - [Get device features](DOCUMENTATION.md#devGetFeatures) and check that:
   * `label` is set to `ID3`
   * all other values did not change with respect to previous step, especially `deviceId`
