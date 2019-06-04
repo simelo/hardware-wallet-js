@@ -47,3 +47,43 @@ describe('Transactions', function () {
   });
 
 });
+
+describe('ApplySettings', function () {
+  it('Unset any value', function () {
+    const buff = deviceWallet.createApplySettings();
+    utils.decodeApplySettings(buff, (applSet) => {
+      assert.equal(applSet.label, "");
+      assert.equal(applSet.language, "");
+      assert.equal(applSet.hasOwnProperty("usePassphrase"), false);
+    });
+  });
+
+  it('Set language but usePassphrase', function () {
+    const buff = deviceWallet.createApplySettings(null, null, "en");
+    utils.decodeApplySettings(buff, (applSet) => {
+      assert.equal(applSet.label, "");
+      assert.equal(applSet.language, "en");
+      assert.equal(applSet.hasOwnProperty("usePassphrase"), false);
+    });
+  });
+
+  it('Set usePassphrase to true', function () {
+    const buff = deviceWallet.createApplySettings(true);
+    utils.decodeApplySettings(buff, (applSet) => {
+      assert.equal(applSet.label, "");
+      assert.equal(applSet.language, "");
+      assert.equal(applSet.hasOwnProperty("usePassphrase"), true);
+      assert.equal(applSet.usePassphrase, true);
+    });
+  });
+
+  it('Set usePassphrase to false', function () {
+    const buff = deviceWallet.createApplySettings(false);
+    utils.decodeApplySettings(buff, (applSet) => {
+      assert.equal(applSet.label, "");
+      assert.equal(applSet.language, "");
+      assert.equal(applSet.hasOwnProperty("usePassphrase"), true);
+      assert.equal(applSet.usePassphrase, false);
+    });
+  });
+});
