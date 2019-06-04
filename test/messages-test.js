@@ -48,13 +48,13 @@ describe('Transactions', function () {
 
 });
 
-describe('ApplySettings', function () {
+describe.only('ApplySettings', function () {
   it('Unset any value', function () {
     const buff = deviceWallet.createApplySettings();
     utils.decodeApplySettings(buff, (applSet) => {
       assert.equal(applSet.label, "");
       assert.equal(applSet.language, "");
-      assert.equal(applSet.hasOwnProperty("usePassphrase"), false);
+      assert.equal(Object.prototype.hasOwnProperty.call(applSet, "usePassphrase"), false);
     });
   });
 
@@ -63,7 +63,7 @@ describe('ApplySettings', function () {
     utils.decodeApplySettings(buff, (applSet) => {
       assert.equal(applSet.label, "");
       assert.equal(applSet.language, "en");
-      assert.equal(applSet.hasOwnProperty("usePassphrase"), false);
+      assert.equal(Object.prototype.hasOwnProperty.call(applSet, "usePassphrase"), false);
     });
   });
 
@@ -72,7 +72,7 @@ describe('ApplySettings', function () {
     utils.decodeApplySettings(buff, (applSet) => {
       assert.equal(applSet.label, "");
       assert.equal(applSet.language, "");
-      assert.equal(applSet.hasOwnProperty("usePassphrase"), true);
+      assert.equal(Object.prototype.hasOwnProperty.call(applSet, "usePassphrase"), true);
       assert.equal(applSet.usePassphrase, true);
     });
   });
@@ -82,7 +82,7 @@ describe('ApplySettings', function () {
     utils.decodeApplySettings(buff, (applSet) => {
       assert.equal(applSet.label, "");
       assert.equal(applSet.language, "");
-      assert.equal(applSet.hasOwnProperty("usePassphrase"), true);
+      assert.equal(Object.prototype.hasOwnProperty.call(applSet, "usePassphrase"), true);
       assert.equal(applSet.usePassphrase, false);
     });
   });

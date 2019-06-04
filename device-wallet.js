@@ -1232,6 +1232,7 @@ const devGetFeatures = function() {
 
 module.exports = {
   DeviceTypeEnum,
+  createApplySettings,
   devAddressGen,
   devApplySettings,
   devBackupDevice,
@@ -1250,6 +1251,5 @@ module.exports = {
   getDevice,
   makeSkywalletMessage,
   setAutoPressButton,
-  setDeviceType,
-  createApplySettings
+  setDeviceType
 };

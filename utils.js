@@ -86,10 +86,10 @@ const decodeApplySettings = function (dataBuffer, respCallback) {
 
 module.exports = {
   constPinCodeReader,
+  decodeApplySettings,
   deviceSetup,
   pinCodeReader,
   rejectPromise,
   timeout,
-  wordReader,
-  decodeApplySettings
+  wordReader
 };
