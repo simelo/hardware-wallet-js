@@ -1250,5 +1250,6 @@ module.exports = {
   getDevice,
   makeSkywalletMessage,
   setAutoPressButton,
-  setDeviceType
+  setDeviceType,
+  createApplySettings
 };
