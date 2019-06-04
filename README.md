@@ -82,10 +82,14 @@ skycoin-cli walletCreate -f $WALLET1.wlt -l $WALLET1
 ```sh
 skycoin-cli listAddresses $WALLET1.wlt
 ```
-- Transfer funds to `ADDRESS1` in new wallet
+- Transfer funds to `ADDRESS1` in new wallet in two transactions
 - Check balance
 ```sh
 skycoin-cli addressBalance $ADDRESS1
+```
+- List address for `WALLET1` and check that `heqd_outputs` in response includes to outputs with `address` set to `ADDRESS1`
+```
+skycoin-cli walletOutputs $WALLET1.wlt
 ```
 - [Get device features](DOCUMENTATION.md#devGetFeatures) and check that:
   * `vendor` is set to `Skycoin Foundation`
@@ -113,7 +117,7 @@ skycoin-cli addressBalance $ADDRESS1
   * `fwMinor` is set to expected firmware minor version number
   * `fwPatch` is set to expected firmware patch version number
   * `firmwareFeatures` is set to `0`
-- [Set device label](DOCUMENTATION.md#devApplySettings) to a new value , say `ID3`. Specify `usePassphrase=null`.
+- [Set device label](DOCUMENTATION.md#devApplySettings) to a new value , say `ID3`. Specify `usePassphrase=false`.
 - [Get device features](DOCUMENTATION.md#devGetFeatures) and check that:
   * `label` is set to `ID3`
   * all other values did not change with respect to previous step, especially `deviceId`
