@@ -341,9 +341,11 @@ const createGetFeaturesRequest = function() {
 const createApplySettings = function(usePassphrase, deviceLabel, language) {
   const msgStructure = {
     'label': deviceLabel || "",
-    'language': language || "",
-    'usePassphrase': Boolean(usePassphrase)
+    'language': language || ""
   };
+  if (usePassphrase !== undefined && usePassphrase !== null) {
+    msgStructure.usePassphrase = Boolean(usePassphrase);
+  }
   const msg = messages.ApplySettings.create(msgStructure);
   const buffer = messages.ApplySettings.encode(msg).finish();
   const chunks = makeSkywalletMessage(buffer, messages.MessageType.MessageType_ApplySettings);
