@@ -1,4 +1,6 @@
 const deviceWallet = require('./device-wallet');
+const bufReceiver = require('./buffer-receiver');
+const messages = require('./protob/js/skycoin');
 
 const rejectPromise = function (reject) {
   return function(msg) {
@@ -57,11 +59,37 @@ const timeout = function(ms) {
   });
 };
 
+const decodeApplySettings = function (dataBuffer, respCallback) {
+  const bufferReceiver = new bufReceiver.BufferReceiver();
+  bufferReceiver.receiveBuffer(dataBuffer, (kind, data) => {
+    if (kind != messages.MessageType.MessageType_ApplySettings) {
+      console.error('Calling decodeApplySettings with wrong message type!', messages.MessageType[kind]);
+      respCallback(null);
+      return;
+    }
+    console.log("kind ", kind);
+    console.log("data ", JSON.stringify(data));
+    try {
+      const answer = messages.ApplySettings.decode(data);
+      console.log(
+        'ApplySettings message:', 'label:', answer.label,
+        'ApplySettings message:', 'language:', answer.language,
+        'ApplySettings message:', 'usePassphrase:', answer.usePassphrase
+      );
+      respCallback(answer);
+    } catch (e) {
+      console.error('Wire format is invalid');
+      respCallback(null);
+    }
+  });
+};
+
 module.exports = {
   constPinCodeReader,
   deviceSetup,
   pinCodeReader,
   rejectPromise,
   timeout,
-  wordReader
+  wordReader,
+  decodeApplySettings
 };
