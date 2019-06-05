@@ -128,15 +128,20 @@ skycoin-cli walletOutputs $WALLET1.wlt
 skycoin-cli walletAddAddresses -f $WALLET1.wlt -n 5
 ```
 - Check once again with desktop wallet
-- Create new transaction from `ADDRESS1` to `ADDRESS2` in test wallet (say `TXN_RAW1`) and display details
+- Create new transaction from `ADDRESS1` to `ADDRESS2` in test wallet (say `TXN_RAW1`) for an spendable amount higher than individual output's coins
 ```sh
 export TXN1_RAW="$(skycoin-cli createRawTransaction -a $ADDRESS1 -f $WALLET1.wlt $ADDRESS2 $AMOUNT)"
-skycoin-cli decodeRawTransaction $TXN1_RAW
+echo $TXN1_RAW
+```
+- Display transaction details and confirm that it contains at least two inputs
+```sh
+export TXN1_JSON=$(skycoin-cli decodeRawTransaction $TXN1_RAW)
+echo $TXN1_JSON
 ```
 - [Sign transaction](DOCUMENTATION.md#devSkycoinTransactionSign) with Skywallet by putting together a message using values resulting from previous step as follows.
   * Set message `nbIn` to the length of transaction `inputs` array
   * Set message `nbOut` to the length of transaction `outputs` array
-  * For each hash in transaction `inputs` array there should be an item in messsage `inputs` array with `hashIn` field set to the very same hash and and address index set to `0`.
+  * For each hash in transaction `inputs` array there should be an item in messsage `inputs` array with `hashIn` field set to the very same hash and `index` set to `0`.
   * For each source item in transaction `outputs` array there should be an item in messsage `outputs` array with fields set as follows:
     - `address` : source item's `dst`
     - `coin` : source item's `coins`
