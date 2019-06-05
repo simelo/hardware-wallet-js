@@ -474,7 +474,7 @@ Allows to sign a transaction with the hardware wallet.
 *Params:*
 - inputTransactions: List of objects with the following fields:
   * `hashIn`: Input hash.
-  * `index`: Index of the address, in the hardware wallet, to which the input belongs.
+  * `index`: Index of the address, in the hardware wallet, to which the input belongs. It is possible not to supply it if input belongs to an address not managed by electronic wallet device.
 - outputTransactions: List of objects with the following fields:
   * `address`: Skycoin address in `Base58` format.
   * `addressIndex`: If the output is used for returning coins/hours to one of the addresses of the hardware
