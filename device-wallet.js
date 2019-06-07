@@ -998,6 +998,9 @@ const devCheckMessageSignature = function(address, message, signature, passphras
         }
       } else if (kind == messages.MessageType.MessageType_PassphraseRequest) {
         devSendPassphraseAck(devReadCallback, passphraseReader);
+      } else if (kind == messages.MessageType.MessageType_Failure) {
+        const answer = decodeFail(kind, dataBuffer);
+        reject(new Error(answer));
       } else {
         reject(new Error('Wrong answer kind', kind));
       }
