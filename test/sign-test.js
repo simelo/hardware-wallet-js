@@ -41,11 +41,44 @@ describe('Sign message', function () {
       catch(rejectPromise());
   };
 
+  const testCheckInvalidSignature = function (messageHash) {
+    return setup().
+      then(() => deviceWallet.devAddressGen(1)).
+      then(function (addresses) {
+        return deviceWallet.devSkycoinSignMessage(0, messageHash).
+          then(function (signature) {
+            var hacked = '';
+            var randomIndex = function (len) {
+              return Math.floor(Math.random() * hacked.length);
+            };
+            for (let i = 0; i < messageHash.length; i++) {
+              hacked += messageHash[randomIndex(messageHash.length)];
+            }
+            return deviceWallet.devCheckMessageSignature(addresses[0], hacked, signature)
+              .then(function () {
+                throw new Error("An invalid signature is expected");
+              }, function (val) {
+                  return val;
+              });
+          }).
+          then(function (strResponse) {
+            return Promise.resolve(`Test success ${strResponse}`);
+          });
+      }).
+      catch(rejectPromise());
+  };
+
   it('Verify that address signed hash', function() {
     this.timeout(0);
     return timeout(200).
       then(() => testSignMessageHash("181bd5656115172fe81451fae4fb56498a97744d89702e73da75ba91ed5200f9")).
       then(() => testSignMessageHash("01a9ef6c25271229ef9760e1536c3dc5ccf0ead7de93a64c12a01340670d87e9"));
+  });
+
+  it('Verify invalid signature', function() {
+    this.timeout(0);
+    return timeout(200).
+      then(() => testCheckInvalidSignature("181bd5656115172fe81451fae4fb56498a97744d89702e73da75ba91ed5200f9"));
   });
 
 });
