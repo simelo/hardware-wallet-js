@@ -61,17 +61,15 @@ describe('Recovery', function () {
 
   it('Can not recovery an initialized device', function() {
     this.timeout(0);
-    return new Promise(function (resolve) {
-      generateSeedOk(12).
-        then(() => deviceWallet.devRecoveryDevice(wordCount, false, wordReader)).
-        then(() => {
-          // Unreachable path but jic
-          reject('Unexpected recovery success');
-        }).
-        catch((err) => {
-          assert.equal(err.toString(), 'Error: Device is already initialized. Use Wipe first.');
-        });
-    })
+    return generateSeedOk(12).
+      then(() => deviceWallet.devRecoveryDevice(wordCount, false, wordReader)).
+      then(() => {
+        // Unreachable path but jic
+        throw new Error('Unexpected recovery success');
+      }).
+      catch((err) => {
+        assert.equal(err.toString(), 'Error: Device is already initialized. Use Wipe first.');
+      });
   });
 
 });
