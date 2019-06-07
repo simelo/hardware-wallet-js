@@ -18,6 +18,14 @@ const wordReader = function () {
   });
 };
 
+const unexpectedWordHandler = function () {
+  return new Promise((resolve, reject) => {
+    console.log("Unexpected call to word reader");
+    reject(new Error("Unexpected call to word reader"));
+  });
+};
+
+
 const customPinCodeReader = function (func, msg) {
   return function() {
     return new Promise((resolve, reject) => {
@@ -63,5 +71,6 @@ module.exports = {
   pinCodeReader,
   rejectPromise,
   timeout,
+  unexpectedWordHandler,
   wordReader
 };

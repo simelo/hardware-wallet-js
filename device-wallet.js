@@ -579,6 +579,19 @@ const decodeSuccess = function(kind, dataBuffer) {
   return `decodeSuccess failed: ${kind}`;
 };
 
+const decodeFail = function(kind, dataBuffer) {
+  if (kind == messages.MessageType.MessageType_Failure) {
+    try {
+      const answer = messages.Failure.decode(dataBuffer);
+      console.log('Fail message code', answer.code, 'message: ', answer.message);
+      return answer.message;
+    } catch (e) {
+      console.error('Wire format is invalid');
+    }
+  }
+  return `decodeSuccess failed: ${kind}`;
+};
+
 const decodeFailureAndPinCode = function(kind, dataBuffer) {
   if (kind == messages.MessageType.MessageType_Failure) {
     try {
@@ -1091,7 +1104,12 @@ const devRecoveryDevice = function(wordCount, usePassphrase, wordReader, dryRun)
     const dataBytes = createRecoveryDeviceRequest(wordCount, usePassphrase, dryRun);
     const deviceHandle = new DeviceHandler(deviceType);
     // eslint-disable-next-line max-statements
-    const buttonAckLoop = function(kind) {
+    const buttonAckLoop = function (kind, data) {
+      if (kind === messages.MessageType.MessageType_Failure) {
+        deviceHandle.close();
+        reject(decodeFail(kind, data));
+        return;
+      }
       if (kind != messages.MessageType.MessageType_ButtonRequest) {
         if (kind == messages.MessageType.MessageType_WordRequest) {
           deviceHandle.close();
