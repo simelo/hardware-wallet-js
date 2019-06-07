@@ -4,6 +4,7 @@ const utils = require('../utils');
 const rejectPromise = utils.rejectPromise;
 
 const setup = utils.deviceSetup;
+const wordReader = utils.unexpectedWordHandler;
 
 const generateSeedOk = function (wordCount) {
   return setup().
@@ -44,6 +45,31 @@ describe('Transactions', function () {
     }).then(function(result) {
       assert.equal(result, 0);
     });
+  });
+
+});
+
+describe('Recovery', function () {
+  if (deviceWallet.getDevice() === null) {
+    console.log("Skycoin hardware NOT FOUND, using emulator");
+    deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.EMULATOR);
+    deviceWallet.setAutoPressButton(true, 'R');
+  } else {
+    console.log("Skycoin hardware is plugged in");
+    deviceWallet.setDeviceType(deviceWallet.DeviceTypeEnum.USB);
+  }
+
+  it('Can not recovery an initialized device', function() {
+    this.timeout(0);
+    return generateSeedOk(12).
+      then(() => deviceWallet.devRecoveryDevice(wordCount, false, wordReader)).
+      then(() => {
+        // Unreachable path but jic
+        throw new Error('Unexpected recovery success');
+      }).
+      catch((err) => {
+        assert.equal(err.toString(), 'Error: Device is already initialized. Use Wipe first.');
+      });
   });
 
 });
