@@ -149,13 +149,19 @@ echo $TXN1_JSON
     - `address_index` : set to `0` if source item `address` equals `ADDRESS1` or to `1` otherwise
 - Check that `signatures` array returned by hardware wallet includes entries for each and every transaction input
 - [Check signatures](DOCUMENTATION.md#devCheckMessageSignature) were signed by corresponding addresses
-- Broadcast transaction. Refer to its id as `TXN1_ID`
+- Create transaction `TXN2_JSON` by replacing `TXN1_JSON` signatures with the array returned by SkyWallet
+- Use `TXN2_JSON` to obtain encoded transaction `TXN2_RAW`
 ```sh
-skycoin-cli broadcastTransaction $TXN1_RAW
+export $TXN2_RAW=$( echo "$TXN2_JSON" | skycoin-cli encodeJsonTransaction - )
+echo $TXN2_RAW
+```
+- Broadcast transaction. Refer to its id as `TXN2_ID`
+```sh
+skycoin-cli broadcastTransaction $TXN2_RAW
 ```
 - After a few minutes check that balance changed.
 ```sh
-skycoin-cli walletBalance $WALLET1
+skycoin-cli walletBalance $WALLET1.wlt
 ```
 - Create a second wallet i.e. `WALLET2`
 ```sh
