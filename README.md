@@ -87,7 +87,7 @@ skycoin-cli listAddresses $WALLET1.wlt
 ```sh
 skycoin-cli addressBalance $ADDRESS1
 ```
-- List address for `WALLET1` and check that `heqd_outputs` in response includes to outputs with `address` set to `ADDRESS1`
+- List address for `WALLET1` and check that `head_outputs` in response includes to outputs with `address` set to `ADDRESS1`
 ```
 skycoin-cli walletOutputs $WALLET1.wlt
 ```
@@ -159,7 +159,7 @@ echo $TXN2_RAW
 ```sh
 export TXN2_ID=$(skycoin-cli broadcastTransaction $TXN2_RAW)
 ```
-- After a few minutes check that balance changed.
+- After a a reasonable time check that balance changed.
 ```sh
 skycoin-cli walletBalance $WALLET1.wlt
 ```
@@ -176,12 +176,22 @@ skycoin-cli lisAddresses $WALLET2.wlt
 ```sh
 skycoin-cli addressBalance $ADDRESS3
 ```
-- Create two transactions. The first one, (i.e. `TXN2`) grabbing funds from first address in `WALLET1` previously recovered in Skywallet device (i.e. `ADDRESS1`). The second one (i.e. `TXN3`) transferring funds from first address in `WALLET2` (i.e. `ADDRESS3`). Receiver in both cases should be second address of `WALLET1` (i.e. `ADDRESS2`) , and change should be sent back to `ADDRESS1`
+- Use Skycoin REST API to create one transaction grabbing funds from `ADDRESS1` (i.e. first address in `WALLET1` previously recovered in Skywallet device) and `ADDRESS3` (i.e. first address in `WALLET2`) so as to transfer to the second address of `WALLET1` (i.e. `ADDRESS2`). Change should be sent back to `ADDRESS1`. If Skycoin node was started with default parameters this can be achieved as follows:
 ```sh
-export TXN2_RAW="$(skycoin-cli createRawTransaction -a $ADDRESS1 -f $WALLET1.wlt -c $ADDRESS1 $ADDRESS2 $AMOUNT)"
-export TXN3_RAW="$(skycoin-cli createRawTransaction -a $ADDRESS3 -f $WALLET2.wlt -c $ADDRESS1 $ADDRESS2 $AMOUNT)"
-skycoin-cli decodeRawTransaction $TXN2_RAW
-skycoin-cli decodeRawTransaction $TXN3_RAW
+curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'content-type: application/json' -d "{
+i    \"hours_selection\": {
+        \"type\": \"auto\",
+        \"mode\": \"share\",
+        \"share_factor\": \"0.5\"
+    },
+    \"addresses\": [\"$ADDRESS1\", \"$ADDRESS3\"],
+    \"change_address\": \"$ADDRESS1\",
+    \"to\": [{
+        \"address\": \"$ADDRESS2\",
+        \"coins\": \"$AMOUNT\",
+    }],
+    \"ignore_unconfirmed\": false
+}"
 ```
 - [Sign transaction](DOCUMENTATION.md#devSkycoinTransactionSign) with Skywallet
   * Set message `nbIn` to the length of transaction `inputs` array
