@@ -192,7 +192,7 @@ curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'content-type: applicat
     \"addresses\": [\"$ADDRESS1\", \"$ADDRESS2\", \"$ADDRESS4\"],
     \"change_address\": \"$ADDRESS1\",
     \"to\": [{
-        \"address\": \"$ADDRESS2\",
+        \"address\": \"$ADDRESS3\",
         \"coins\": \"$AMOUNT\"
     }],
     \"ignore_unconfirmed\": false
