@@ -152,12 +152,12 @@ echo $TXN1_JSON
 - Create transaction `TXN2_JSON` by replacing `TXN1_JSON` signatures with the array returned by SkyWallet
 - Use `TXN2_JSON` to obtain encoded transaction `TXN2_RAW`
 ```sh
-export $TXN2_RAW=$( echo "$TXN2_JSON" | skycoin-cli encodeJsonTransaction - )
+export $TXN2_RAW=$( echo "$TXN2_JSON" | skycoin-cli encodeJsonTransaction - | grep '"rawtx"' | cut -d '"' -f4)
 echo $TXN2_RAW
 ```
 - Broadcast transaction. Refer to its id as `TXN2_ID`
 ```sh
-skycoin-cli broadcastTransaction $TXN2_RAW
+export TXN2_ID=$(skycoin-cli broadcastTransaction $TXN2_RAW)
 ```
 - After a few minutes check that balance changed.
 ```sh
