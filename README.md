@@ -229,8 +229,15 @@ curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'content-type: applicat
     - `hour` : source item's `hours`
     - `address_index` set to 2 (since destination address is `ADDRESS3`)
 - Create a new transaction JSON object (a.k.a `TXN4_JSON`) from `TXN3_JSON` and the anterior signatures like this
-  * TODO: Details
-- Use `TXN4_JSON` to obtain encoded transaction `TXN2_RAW`
+  * `type` same as in `TXN3_JSON`
+  * `inner_hash` same as in `TXN3_JSON`
+  * `sigs` returned by SkyWallet in same order as corresponding input
+  * `inputs` is an array of strings. For each item in `TXN3_JSON` `inputs` include the value of its `uxid` field in `TXN4_JSON` `inputs` array. Respect original order.
+  * `outputs` is an array of objects constructed out of `TXN3_JSON` `outputs` items, in te same order, as follows
+    - `address` : source item's `address`
+    - `coins` : source item's `coins`
+    - `hours` : source item's `hours`
+- Use `TXN4_JSON` to obtain encoded transaction `TXN4_RAW`
 ```sh
 export $TXN4_RAW=$( echo "$TXN4_JSON" | skycoin-cli encodeJsonTransaction - | grep '"rawtx"' | cut -d '"' -f4)
 echo $TXN4_RAW
@@ -239,9 +246,10 @@ echo $TXN4_RAW
 ```sh
 export TXN4_ID=$(skycoin-cli broadcastTransaction $TXN4_RAW)
 ```
-- After a a reasonable time check that balance changed.
+- After a a reasonable time check that wallets balance changed.
 ```sh
 skycoin-cli walletBalance $WALLET1.wlt
+skycoin-cli walletBalance $WALLET2.wlt
 ```
 
 # Creating release builds
