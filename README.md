@@ -48,7 +48,8 @@ Some values need to be known during the process. They are represented by the fol
 
 - `WALLET1`, `WALLET2`, ... names of wallets created by `skycoin_cli`
 - `ADDRESS1`, `ADDRESS2`, ... Skycoin addresses
-- `TXN1_RAW`, `TXN2_RAW`, ... transactions data encoded iun hex dump format
+- `TXN1_RAW`, `TXN2_RAW`, ... transactions data encoded in hex dump format
+- `TXN1_JSON`, `TXN2_JSON`, ... transactions data encoded in JSON format, if numeric index value matches the one of another variable with `RAW` prefix then both refer to the same transaction
 - `TXN1_ID`, `TXN2_ID`, ... Hash ID of transactions after broadcasting to the P2P network
 - `AMOUNT` represents an arbitrary number of coins
 - `ID1`, `ID2`, `ID3`, ... unique ID values , usually strings identifying hardware or software artifacts
@@ -201,24 +202,24 @@ curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'content-type: applicat
 - [Sign transaction](DOCUMENTATION.md#devSkycoinTransactionSign) represented by `TXN3_JSON` for inputs owned by Skywallet (i.e. `WALLET1`)
   * Set message `nbIn` to the 
   * Set message `nbOut` to the length of transaction `outputs` array
-  * For each hash in transaction `inputs` array there should be an item in messsage `inputs` array with:
-    - `hashIn` field set to the very same value
+  * For each object in transaction `inputs` array there should be an item in messsage `inputs` array with:
+    - `hashIn` field set to the value bound to object's `uxid` key
     - address index as follows
       * not set if input `address` is `ADDRESS4`
       * `0` if input `address` is `ADDRESS1`
       * `1` if input `address` is `ADDRESS2`
   * For each source item in transaction `outputs` array there should be an item in messsage `outputs` array with fields set as follows:
-    - `address` : source item's `dst`
+    - `address` : source item's `address`
     - `coin` : source item's `coins * 1000000`
     - `hour` : source item's `hours`
     - `address_index` set to 2 (since destination address is `ADDRESS3`)
-- Check that signatures array includes an entry for every input except the one associated to `ADDRESS4`
+- Check that signatures array includes one entry for every input except the one associated to `ADDRESS4`, which should be an empty string
 - [Recover seed](DOCUMENTATION.md#devRecoveryDevice) `SEED2` in Skywallet device (`dry-run=false`).
 - [Sign transaction](DOCUMENTATION.md#devSkycoinTransactionSign) represented by `TXN3_JSON` for inputs owned by Skywallet (i.e. `WALLET2`)
   * Set message `nbIn` to the length of transaction `inputs` array
   * Set message `nbOut` to the length of transaction `outputs` array
   * For each hash in transaction `inputs` array there should be an item in messsage `inputs` array with:
-    - `hashIn` field set to the very same value
+    - `hashIn` field set to the value bound to object's `uxid` key
     - address index as follows
       * not set if input `address` is `ADDRESS1`
       * not set if input `address` is `ADDRESS2`
@@ -228,7 +229,7 @@ curl -X POST http://127.0.0.1:6420/api/v2/transaction -H 'content-type: applicat
     - `coin` : source item's `coins * 1000000`
     - `hour` : source item's `hours`
     - `address_index` set to 2 (since destination address is `ADDRESS3`)
-- Create a new transaction JSON object (a.k.a `TXN4_JSON`) from `TXN3_JSON` and the anterior signatures like this
+- Create a new transaction JSON object (a.k.a `TXN4_JSON`) from `TXN3_JSON` and the previous signatures like this
   * `type` same as in `TXN3_JSON`
   * `inner_hash` same as in `TXN3_JSON`
   * `sigs` returned by SkyWallet in same order as corresponding input

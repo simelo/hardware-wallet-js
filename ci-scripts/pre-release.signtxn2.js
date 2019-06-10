@@ -13,8 +13,8 @@ const address4 = process.env.ADDRESS4;
 const envTxn = process.env.TXN3_JSON;
 const rTxn = JSON.parse(envTxn);
 
-console.log("Sender address", address1);
-console.log("Destination address", address2);
+console.log("WALLET1 addresses", address1, address2, address3);
+console.log("WALLET2 addresses", address4);
 console.log("Detected transaction JSON object", JSON.stringify(rTxn));
 console.log('Passphrase :', usePassphrase);
 
@@ -39,20 +39,27 @@ confirmPromise().
     let outputs = [];
 
     for (i = 0; i < rTxn.inputs.length; i += 1) {
-      inputs.push({
-        'hashIn': rTxn.inputs[i],
-        'index': 0
-      });
+      const item = rTxn.inputs[i];
+      let obj = {'hashIn': item.uxid};
+      const index = addresses.indexOf(item.address);
+      if (index >= 0) {
+        obj.index = index;
+      }
+      inputs.push(obj);
     }
 
     for (i = 0; i < rTxn.outputs.length; i += 1) {
       const out = rTxn.outputs[i];
-      outputs.push({
-        'address': out.dst,
-        'address_index': addresses.indexOf(out.dst),
+      const index = addresses.indexOf(out.address);
+      let obj = {
+        'address': out.address,
         'coin': out.coins.replace('.', ''),
         'hour': out.hours
-      });
+      };
+      if (index >= 0) {
+        obj.address_index = index;
+      }
+      outputs.push(obj);
     }
 
     console.log('Sending inputs to device', JSON.stringify(inputs));
