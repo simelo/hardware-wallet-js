@@ -102,7 +102,7 @@ skycoin-cli walletOutputs $WALLET1.wlt
   * `fwMinor` is set to expected firmware minor version number
   * `fwPatch` is set to expected firmware patch version number
   * `firmwareFeatures` is set to `0`
-- Ensure device is seedless by [wiping it](DOCUMENTATION.md#devWipeDevice). Check that you end up in home screen with `NEEDS SEED!` message at the top.
+- Ensure device is seedless by [wiping it](DOCUMENTATION.md#devWipeDevice). Check that device ends up in home screen with `NEEDS SEED!` message at the top.
 - [Recover seed](DOCUMENTATION.md#devRecoveryDevice) `SEED1` in Skywallet device (`dry-run=false`).
 - [Get device features](DOCUMENTATION.md#devGetFeatures) and check that:
   * `vendor` is set to `Skycoin Foundation`
